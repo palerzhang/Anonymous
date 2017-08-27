@@ -1,0 +1,6 @@
+!*.lib
+!*.dll
+*.sln
+*.sdf
+*.suo
+/Anonymous/Anonymous/Debug/*
