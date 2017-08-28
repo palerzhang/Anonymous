@@ -18,12 +18,18 @@
     <ClInclude Include="AsWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AsCamera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AsCamera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -67,9 +67,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AsCamera.h" />
     <ClInclude Include="AsWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AsCamera.cpp" />
     <ClCompile Include="AsWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
