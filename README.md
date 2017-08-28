@@ -2,9 +2,9 @@
 
 Welcome :)
 
-GLEW and GLFW are required
-
 OpenGL is required over version 3.0
+
+With: GLEW(2.1.0), GLFW(3.2.1), GLM(0.9.6.3)
 
 Please use VS2013(VC12).
 
