@@ -3,4 +3,7 @@
 *.sln
 *.sdf
 *.suo
+*.vcxproj
+*.filters
+*.opensdf
 /Anonymous/Anonymous/Debug/*
