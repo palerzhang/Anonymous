@@ -2,6 +2,7 @@
 #define _ANONYMOUS_QUATERNION_H_
 
 #include "AsVector3.h"
+#include "AsMatrix33.h"
 
 enum AsIDENTITY
 {
@@ -13,29 +14,19 @@ class AsQuaternion
 public:
 	float x, y, z, w;
 
-	/**
-	\brief Default constructor, does not do any initialization.
-	*/
 	inline AsQuaternion()
 	{
 	}
 
-	//! identity constructor
 	inline AsQuaternion(AsIDENTITY r) : x(0.0f), y(0.0f), z(0.0f), w(1.0f)
 	{
 		AS_UNUSED(r);
 	}
 
-	/**
-	\brief Constructor from a scalar: sets the real part w to the scalar value, and the imaginary parts (x,y,z) to zero
-	*/
 	explicit inline AsQuaternion(float r) : x(0.0f), y(0.0f), z(0.0f), w(r)
 	{
 	}
 
-	/**
-	\brief Constructor.  Take note of the order of the elements!
-	*/
 	inline AsQuaternion(float nx, float ny, float nz, float nw) : x(nx), y(ny), z(nz), w(nw)
 	{
 	}
@@ -59,9 +50,6 @@ public:
 		z = unitAxis.z * s;
 	}
 
-	/**
-	\brief Copy ctor.
-	*/
 	inline AsQuaternion(const AsQuaternion& v) : x(v.x), y(v.y), z(v.z), w(v.w)
 	{
 	}

@@ -2,290 +2,322 @@
 #define _ANONYMOUS_MATRIX44_H_
 
 #include "AsQuaternion.h"
-#include "AsMatrix44.h"
+#include "AsVector4.h"
 #include "AsMatrix33.h"
 #include "AsTransform.h"
 
 class AsMatrix44
 {
 public:
+	AsVector4 column0, column1, column2, column3; // the four base vectors
 
-	float x, y, z, w;
-
+	//! Default constructor
 	inline AsMatrix44()
 	{
 	}
 
-	AsMatrix44(AsZERO r) : x(0.0f), y(0.0f), z(0.0f), w(0.0f)
+	//! identity constructor
+	inline AsMatrix44(AsIDENTITY r)
+		: column0(1.0f, 0.0f, 0.0f, 0.0f)
+		, column1(0.0f, 1.0f, 0.0f, 0.0f)
+		, column2(0.0f, 0.0f, 1.0f, 0.0f)
+		, column3(0.0f, 0.0f, 0.0f, 1.0f)
 	{
 		AS_UNUSED(r);
 	}
 
-	explicit inline AsMatrix44(float a) : x(a), y(a), z(a), w(a)
+	//! zero constructor
+	inline AsMatrix44(AsZERO r) : column0(AsZero), column1(AsZero), column2(AsZero), column3(AsZero)
+	{
+		AS_UNUSED(r);
+	}
+
+	//! Construct from four 4-vectors
+	AsMatrix44(const AsVector4& col0, const AsVector4& col1, const AsVector4& col2, const AsVector4& col3)
+		: column0(col0), column1(col1), column2(col2), column3(col3)
 	{
 	}
 
-	inline AsMatrix44(float nx, float ny, float nz, float nw) : x(nx), y(ny), z(nz), w(nw)
+	//! constructor that generates a multiple of the identity matrix
+	explicit inline AsMatrix44(float r)
+		: column0(r, 0.0f, 0.0f, 0.0f)
+		, column1(0.0f, r, 0.0f, 0.0f)
+		, column2(0.0f, 0.0f, r, 0.0f)
+		, column3(0.0f, 0.0f, 0.0f, r)
 	{
 	}
 
-	inline AsMatrix44(const AsVector3& v, float nw) : x(v.x), y(v.y), z(v.z), w(nw)
+	//! Construct from three base vectors and a translation
+	AsMatrix44(const AsVector3& col0, const AsVector3& col1, const AsVector3& col2, const AsVector3& col3)
+		: column0(col0, 0), column1(col1, 0), column2(col2, 0), column3(col3, 1.0f)
 	{
 	}
 
-	explicit inline AsMatrix44(const float v[]) : x(v[0]), y(v[1]), z(v[2]), w(v[3])
+	//! Construct from float[16]
+	explicit inline AsMatrix44(float values[])
+		: column0(values[0], values[1], values[2], values[3])
+		, column1(values[4], values[5], values[6], values[7])
+		, column2(values[8], values[9], values[10], values[11])
+		, column3(values[12], values[13], values[14], values[15])
 	{
 	}
 
-	inline AsMatrix44(const AsMatrix44& v) : x(v.x), y(v.y), z(v.z), w(v.w)
+	//! Construct from a quaternion
+	explicit inline AsMatrix44(const AsQuaternion& q)
 	{
+		const float x = q.x;
+		const float y = q.y;
+		const float z = q.z;
+		const float w = q.w;
+
+		const float x2 = x + x;
+		const float y2 = y + y;
+		const float z2 = z + z;
+
+		const float xx = x2 * x;
+		const float yy = y2 * y;
+		const float zz = z2 * z;
+
+		const float xy = x2 * y;
+		const float xz = x2 * z;
+		const float xw = x2 * w;
+
+		const float yz = y2 * z;
+		const float yw = y2 * w;
+		const float zw = z2 * w;
+
+		column0 = AsVector4(1.0f - yy - zz, xy + zw, xz - yw, 0.0f);
+		column1 = AsVector4(xy - zw, 1.0f - xx - zz, yz + xw, 0.0f);
+		column2 = AsVector4(xz + yw, yz - xw, 1.0f - xx - yy, 0.0f);
+		column3 = AsVector4(0.0f, 0.0f, 0.0f, 1.0f);
+	}
+
+	//! Construct from a diagonal vector
+	explicit inline AsMatrix44(const AsVector4& diagonal)
+		: column0(diagonal.x, 0.0f, 0.0f, 0.0f)
+		, column1(0.0f, diagonal.y, 0.0f, 0.0f)
+		, column2(0.0f, 0.0f, diagonal.z, 0.0f)
+		, column3(0.0f, 0.0f, 0.0f, diagonal.w)
+	{
+	}
+
+	//! Construct from Mat33 and a translation
+	AsMatrix44(const AsMatrix33& axes, const AsVector3& position)
+		: column0(axes.column0, 0.0f), column1(axes.column1, 0.0f), column2(axes.column2, 0.0f), column3(position, 1.0f)
+	{
+	}
+
+	AsMatrix44(const AsTransform& t)
+	{
+		*this = AsMatrix44(AsMatrix33(t.q), t.p);
 	}
 
 	/**
-	\brief Assignment operator
+	\brief returns true if the two matrices are exactly equal
 	*/
-	inline AsMatrix44& operator=(const AsMatrix44& p)
+	inline bool operator==(const AsMatrix44& m) const
 	{
-		x = p.x;
-		y = p.y;
-		z = p.z;
-		w = p.w;
+		return column0 == m.column0 && column1 == m.column1 && column2 == m.column2 && column3 == m.column3;
+	}
+
+	//! Copy constructor
+	inline AsMatrix44(const AsMatrix44& other)
+		: column0(other.column0), column1(other.column1), column2(other.column2), column3(other.column3)
+	{
+	}
+
+	//! Assignment operator
+	inline AsMatrix44& operator=(const AsMatrix44& other)
+	{
+		column0 = other.column0;
+		column1 = other.column1;
+		column2 = other.column2;
+		column3 = other.column3;
 		return *this;
 	}
 
-	/**
-	\brief element access
-	*/
-	inline float& operator[](unsigned int index)
+	//! Get transposed matrix
+	inline const AsMatrix44 getTranspose() const
 	{
-		return reinterpret_cast<float*>(this)[index];
+		return AsMatrix44(
+			AsVector4(column0.x, column1.x, column2.x, column3.x), AsVector4(column0.y, column1.y, column2.y, column3.y),
+			AsVector4(column0.z, column1.z, column2.z, column3.z), AsVector4(column0.w, column1.w, column2.w, column3.w));
 	}
 
-	/**
-	\brief element access
-	*/
-	inline const float& operator[](unsigned int index) const
+	//! Unary minus
+	inline const AsMatrix44 operator-() const
 	{
-		return reinterpret_cast<const float*>(this)[index];
+		return AsMatrix44(-column0, -column1, -column2, -column3);
 	}
 
-	/**
-	\brief returns true if the two vectors are exactly equal.
-	*/
-	inline bool operator==(const AsMatrix44& v) const
+	//! Add
+	inline const AsMatrix44 operator+(const AsMatrix44& other) const
 	{
-		return x == v.x && y == v.y && z == v.z && w == v.w;
+		return AsMatrix44(column0 + other.column0, column1 + other.column1, column2 + other.column2,
+			column3 + other.column3);
 	}
 
-	/**
-	\brief returns true if the two vectors are not exactly equal.
-	*/
-	inline bool operator!=(const AsMatrix44& v) const
+	//! Subtract
+	inline const AsMatrix44 operator-(const AsMatrix44& other) const
 	{
-		return x != v.x || y != v.y || z != v.z || w != v.w;
+		return AsMatrix44(column0 - other.column0, column1 - other.column1, column2 - other.column2,
+			column3 - other.column3);
 	}
 
-	/**
-	\brief tests for exact zero vector
-	*/
-	inline bool isZero() const
+	//! Scalar multiplication
+	inline const AsMatrix44 operator*(float scalar) const
 	{
-		return x == 0 && y == 0 && z == 0 && w == 0;
+		return AsMatrix44(column0 * scalar, column1 * scalar, column2 * scalar, column3 * scalar);
 	}
 
-	/**
-	\brief returns true if all 3 elems of the vector are finite (not NAN or INF, etc.)
-	*/
+	friend AsMatrix44 operator*(float, const AsMatrix44&);
+
+	//! Matrix multiplication
+	inline const AsMatrix44 operator*(const AsMatrix44& other) const
+	{
+		// Rows from this <dot> columns from other
+		// column0 = transform(other.column0) etc
+		return AsMatrix44(transform(other.column0), transform(other.column1), transform(other.column2),
+			transform(other.column3));
+	}
+
+	// a <op>= b operators
+
+	//! Equals-add
+	inline AsMatrix44& operator+=(const AsMatrix44& other)
+	{
+		column0 += other.column0;
+		column1 += other.column1;
+		column2 += other.column2;
+		column3 += other.column3;
+		return *this;
+	}
+
+	//! Equals-sub
+	inline AsMatrix44& operator-=(const AsMatrix44& other)
+	{
+		column0 -= other.column0;
+		column1 -= other.column1;
+		column2 -= other.column2;
+		column3 -= other.column3;
+		return *this;
+	}
+
+	//! Equals scalar multiplication
+	inline AsMatrix44& operator*=(float scalar)
+	{
+		column0 *= scalar;
+		column1 *= scalar;
+		column2 *= scalar;
+		column3 *= scalar;
+		return *this;
+	}
+
+	//! Equals matrix multiplication
+	inline AsMatrix44& operator*=(const AsMatrix44& other)
+	{
+		*this = *this * other;
+		return *this;
+	}
+
+	//! Element access, mathematical way!
+	inline float operator()(unsigned int row, unsigned int col) const
+	{
+		return (*this)[col][row];
+	}
+
+	//! Element access, mathematical way!
+	inline float& operator()(unsigned int row, unsigned int col)
+	{
+		return (*this)[col][row];
+	}
+
+	//! Transform vector by matrix, equal to v' = M*v
+	inline const AsVector4 transform(const AsVector4& other) const
+	{
+		return column0 * other.x + column1 * other.y + column2 * other.z + column3 * other.w;
+	}
+
+	//! Transform vector by matrix, equal to v' = M*v
+	inline const AsVector3 transform(const AsVector3& other) const
+	{
+		return transform(AsVector4(other, 1.0f)).getXYZ();
+	}
+
+	//! Rotate vector by matrix, equal to v' = M*v
+	inline const AsVector4 rotate(const AsVector4& other) const
+	{
+		return column0 * other.x + column1 * other.y + column2 * other.z; // + column3*0;
+	}
+
+	//! Rotate vector by matrix, equal to v' = M*v
+	inline const AsVector3 rotate(const AsVector3& other) const
+	{
+		return rotate(AsVector4(other, 1.0f)).getXYZ();
+	}
+
+	inline const AsVector3 getBasis(int num) const
+	{
+		return (&column0)[num].getXYZ();
+	}
+
+	inline const AsVector3 getPosition() const
+	{
+		return column3.getXYZ();
+	}
+
+	inline void setPosition(const AsVector3& position)
+	{
+		column3.x = position.x;
+		column3.y = position.y;
+		column3.z = position.z;
+	}
+
+	inline const float* front() const
+	{
+		return &column0.x;
+	}
+
+	inline AsVector4& operator[](unsigned int num)
+	{
+		return (&column0)[num];
+	}
+	inline const AsVector4& operator[](unsigned int num) const
+	{
+		return (&column0)[num];
+	}
+
+	inline void scale(const AsVector4& p)
+	{
+		column0 *= p.x;
+		column1 *= p.y;
+		column2 *= p.z;
+		column3 *= p.w;
+	}
+
+	inline const AsMatrix44 inverseRT(void) const
+	{
+		AsVector3 r0(column0.x, column1.x, column2.x), r1(column0.y, column1.y, column2.y),
+			r2(column0.z, column1.z, column2.z);
+
+		return AsMatrix44(r0, r1, r2, -(r0 * column3.x + r1 * column3.y + r2 * column3.z));
+	}
+
 	inline bool isFinite() const
 	{
-		return AsIsFinite(x) && AsIsFinite(y) && AsIsFinite(z) && AsIsFinite(w);
-	}
-
-	/**
-	\brief is normalized - used by API parameter validation
-	*/
-	inline bool isNormalized() const
-	{
-		const float unitTolerance = 1e-4f;
-		return isFinite() && AsAbs(magnitude() - 1) < unitTolerance;
-	}
-
-	/**
-	\brief returns the squared magnitude
-
-	Avoids calling AsSqrt()!
-	*/
-	inline float magnitudeSquared() const
-	{
-		return x * x + y * y + z * z + w * w;
-	}
-
-	/**
-	\brief returns the magnitude
-	*/
-	inline float magnitude() const
-	{
-		return AsSqrt(magnitudeSquared());
-	}
-
-	/**
-	\brief negation
-	*/
-	inline AsMatrix44 operator-() const
-	{
-		return AsMatrix44(-x, -y, -z, -w);
-	}
-
-	/**
-	\brief vector addition
-	*/
-	inline AsMatrix44 operator+(const AsMatrix44& v) const
-	{
-		return AsMatrix44(x + v.x, y + v.y, z + v.z, w + v.w);
-	}
-
-	/**
-	\brief vector difference
-	*/
-	inline AsMatrix44 operator-(const AsMatrix44& v) const
-	{
-		return AsMatrix44(x - v.x, y - v.y, z - v.z, w - v.w);
-	}
-
-	/**
-	\brief scalar post-multiplication
-	*/
-
-	inline AsMatrix44 operator*(float f) const
-	{
-		return AsMatrix44(x * f, y * f, z * f, w * f);
-	}
-
-	/**
-	\brief scalar division
-	*/
-	inline AsMatrix44 operator/(float f) const
-	{
-		f = 1.0f / f;
-		return AsMatrix44(x * f, y * f, z * f, w * f);
-	}
-
-	/**
-	\brief vector addition
-	*/
-	inline AsMatrix44& operator+=(const AsMatrix44& v)
-	{
-		x += v.x;
-		y += v.y;
-		z += v.z;
-		w += v.w;
-		return *this;
-	}
-
-	/**
-	\brief vector difference
-	*/
-	inline AsMatrix44& operator-=(const AsMatrix44& v)
-	{
-		x -= v.x;
-		y -= v.y;
-		z -= v.z;
-		w -= v.w;
-		return *this;
-	}
-
-	/**
-	\brief scalar multiplication
-	*/
-	inline AsMatrix44& operator*=(float f)
-	{
-		x *= f;
-		y *= f;
-		z *= f;
-		w *= f;
-		return *this;
-	}
-	/**
-	\brief scalar division
-	*/
-	inline AsMatrix44& operator/=(float f)
-	{
-		f = 1.0f / f;
-		x *= f;
-		y *= f;
-		z *= f;
-		w *= f;
-		return *this;
-	}
-
-	/**
-	\brief returns the scalar product of this and other.
-	*/
-	inline float dot(const AsMatrix44& v) const
-	{
-		return x * v.x + y * v.y + z * v.z + w * v.w;
-	}
-
-	/** return a unit vector */
-
-	inline AsMatrix44 getNormalized() const
-	{
-		float m = magnitudeSquared();
-		return m > 0.0f ? *this * AsRecipSqrt(m) : AsMatrix44(0, 0, 0, 0);
-	}
-
-	/**
-	\brief normalizes the vector in place
-	*/
-	inline float normalize()
-	{
-		float m = magnitude();
-		if (m > 0.0f)
-			*this /= m;
-		return m;
-	}
-
-	/**
-	\brief a[i] * b[i], for all i.
-	*/
-	inline AsMatrix44 multiply(const AsMatrix44& a) const
-	{
-		return AsMatrix44(x * a.x, y * a.y, z * a.z, w * a.w);
-	}
-
-	/**
-	\brief element-wise minimum
-	*/
-	inline AsMatrix44 minimum(const AsMatrix44& v) const
-	{
-		return AsMatrix44(AsMin(x, v.x), AsMin(y, v.y), AsMin(z, v.z), AsMin(w, v.w));
-	}
-
-	/**
-	\brief element-wise maximum
-	*/
-	inline AsMatrix44 maximum(const AsMatrix44& v) const
-	{
-		return AsMatrix44(AsMax(x, v.x), AsMax(y, v.y), AsMax(z, v.z), AsMax(w, v.w));
-	}
-
-	inline AsVector3 getXYZ() const
-	{
-		return AsVector3(x, y, z);
-	}
-
-	/**
-	\brief set vector elements to zero
-	*/
-	inline void setZero()
-	{
-		x = y = z = w = 0.0f;
+		return column0.isFinite() && column1.isFinite() && column2.isFinite() && column3.isFinite();
 	}
 };
 
-static inline AsMatrix44 operator*(float f, const AsMatrix44& v)
+// implementation from AsTransform.h
+inline AsTransform::AsTransform(const AsMatrix44& m)
 {
-	return AsMatrix44(f * v.x, f * v.y, f * v.z, f * v.w);
+	AsVector3 column0 = AsVector3(m.column0.x, m.column0.y, m.column0.z);
+	AsVector3 column1 = AsVector3(m.column1.x, m.column1.y, m.column1.z);
+	AsVector3 column2 = AsVector3(m.column2.x, m.column2.y, m.column2.z);
+
+	q = AsQuaternion(AsMatrix33(column0, column1, column2));
+	p = AsVector3(m.column3.x, m.column3.y, m.column3.z);
 }
 
 #endif

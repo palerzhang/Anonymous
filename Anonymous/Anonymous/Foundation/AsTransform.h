@@ -3,6 +3,7 @@
 
 #include "AsQuaternion.h"
 #include "AsPlane.h"
+#include "AsMatrix44.h"
 
 class AsTransform
 {
@@ -36,7 +37,7 @@ public:
 	{
 	}
 
-	inline explicit AsTransform(const AsMatrix44& m); // defined in AsMatrix44.h
+	inline explicit AsTransform(const AsMatrix44& m);
 
 	/**
 	\brief returns true if the two transforms are exactly equal

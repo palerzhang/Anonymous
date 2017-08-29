@@ -283,6 +283,11 @@ public:
 	{
 		return AsVector3(AsAbs(x), AsAbs(y), AsAbs(z));
 	}
+
+	inline const float* valuePtr()
+	{
+		return reinterpret_cast<float*>(this);
+	}
 };
 
 static inline AsVector3 operator*(float f, const AsVector3& v)
