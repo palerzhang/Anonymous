@@ -309,40 +309,39 @@ public:
 	{
 		return (&column0)[num];
 	}
+	inline AsQuaternion toQuaternion()
+	{
+		if (column2.z < 0)
+		{
+			if (column0.x > column1.y)
+			{
+				float t = 1 + column0.x - column1.y - column2.z;
+				return AsQuaternion(t, column0.y + column1.x, column2.x + column0.z, column1.z - column2.y) *
+					(0.5f / AsSqrt(t));
+			}
+			else
+			{
+				float t = 1 - column0.x + column1.y - column2.z;
+				return AsQuaternion(column0.y + column1.x, t, column1.z + column2.y, column2.x - column0.z) *
+					(0.5f / AsSqrt(t));
+			}
+		}
+		else
+		{
+			if (column0.x < -column1.y)
+			{
+				float t = 1 - column0.x - column1.y + column2.z;
+				return AsQuaternion(column2.x + column0.z, column1.z + column2.y, t, column0.y - column1.x) *
+					(0.5f / AsSqrt(t));
+			}
+			else
+			{
+				float t = 1 + column0.x + column1.y + column2.z;
+				return AsQuaternion(column1.z - column2.y, column2.x - column0.z, column0.y - column1.x, t) *
+					(0.5f / AsSqrt(t));
+			}
+		}
+	}
 };
-
-inline AsQuaternion::AsQuaternion(const AsMatrix33& m)
-{
-	if (m.column2.z < 0)
-	{
-		if (m.column0.x > m.column1.y)
-		{
-			float t = 1 + m.column0.x - m.column1.y - m.column2.z;
-			*this = AsQuaternion(t, m.column0.y + m.column1.x, m.column2.x + m.column0.z, m.column1.z - m.column2.y) *
-				(0.5f / AsSqrt(t));
-		}
-		else
-		{
-			float t = 1 - m.column0.x + m.column1.y - m.column2.z;
-			*this = AsQuaternion(m.column0.y + m.column1.x, t, m.column1.z + m.column2.y, m.column2.x - m.column0.z) *
-				(0.5f / AsSqrt(t));
-		}
-	}
-	else
-	{
-		if (m.column0.x < -m.column1.y)
-		{
-			float t = 1 - m.column0.x - m.column1.y + m.column2.z;
-			*this = AsQuaternion(m.column2.x + m.column0.z, m.column1.z + m.column2.y, t, m.column0.y - m.column1.x) *
-				(0.5f / AsSqrt(t));
-		}
-		else
-		{
-			float t = 1 + m.column0.x + m.column1.y + m.column2.z;
-			*this = AsQuaternion(m.column1.z - m.column2.y, m.column2.x - m.column0.z, m.column0.y - m.column1.x, t) *
-				(0.5f / AsSqrt(t));
-		}
-	}
-}
 
 #endif

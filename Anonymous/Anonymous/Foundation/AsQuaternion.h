@@ -2,12 +2,16 @@
 #define _ANONYMOUS_QUATERNION_H_
 
 #include "AsVector3.h"
-#include "AsMatrix33.h"
 
 enum AsIDENTITY
 {
 	AsIdentity = 0
 };
+
+/*
+ * Quaternion
+ *  Referece PhysX
+ */
 
 class AsQuaternion
 {
@@ -31,14 +35,10 @@ public:
 	{
 	}
 
-	/**
-	\brief Creates from angle-axis representation.
-
-	Axis must be normalized!
-
-	Angle is in radians!
-
-	<b>Unit:</b> Radians
+	/*
+	\ Construct a quaternion with a rotation axis and an angle (in radians)
+	\  The axis must be normalized!
+	\   So the quaternion will be normalized!
 	*/
 	inline AsQuaternion(float angleRadians, const AsVector3& unitAxis)
 	{
@@ -53,13 +53,6 @@ public:
 	inline AsQuaternion(const AsQuaternion& v) : x(v.x), y(v.y), z(v.z), w(v.w)
 	{
 	}
-
-	/**
-	\brief Creates from orientation matrix.
-
-	\param[in] m Rotation matrix to extract quaternion from.
-	*/
-	inline explicit AsQuaternion(const AsMatrix33& m);
 
 	/**
 	\brief returns true if quat is identity

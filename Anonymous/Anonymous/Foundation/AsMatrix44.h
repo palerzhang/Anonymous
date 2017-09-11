@@ -1,7 +1,6 @@
 #ifndef _ANONYMOUS_MATRIX44_H_
 #define _ANONYMOUS_MATRIX44_H_
 
-#include "AsQuaternion.h"
 #include "AsVector4.h"
 #include "AsMatrix33.h"
 #include "AsTransform.h"
@@ -307,17 +306,20 @@ public:
 	{
 		return column0.isFinite() && column1.isFinite() && column2.isFinite() && column3.isFinite();
 	}
+
+	inline AsTransform toTransform()
+	{
+		AsTransform transform;
+
+		AsVector3 column3_0 = AsVector3(column0.x, column0.y, column0.z);
+		AsVector3 column3_1 = AsVector3(column1.x, column1.y, column1.z);
+		AsVector3 column3_2 = AsVector3(column2.x, column2.y, column2.z);
+
+		transform.q = AsMatrix33(column3_0, column3_1, column3_2).toQuaternion();
+		transform.p = AsVector3(column3.x, column3.y, column3.z);
+
+		return transform;
+	}
 };
-
-// implementation from AsTransform.h
-inline AsTransform::AsTransform(const AsMatrix44& m)
-{
-	AsVector3 column0 = AsVector3(m.column0.x, m.column0.y, m.column0.z);
-	AsVector3 column1 = AsVector3(m.column1.x, m.column1.y, m.column1.z);
-	AsVector3 column2 = AsVector3(m.column2.x, m.column2.y, m.column2.z);
-
-	q = AsQuaternion(AsMatrix33(column0, column1, column2));
-	p = AsVector3(m.column3.x, m.column3.y, m.column3.z);
-}
 
 #endif

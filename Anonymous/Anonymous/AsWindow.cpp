@@ -1,5 +1,10 @@
 #include "AsWindow.h"
 
+/*
+\ Version 1.0.0
+\ draw a rotatable triangle
+*/
+
 AsWindow * AsWindow::sInstanceHandleEvents = nullptr;
 
 void AsWindow::DispatchKeyboardEvents(GLFWwindow* window, int key, int scancode, int action, int mode)
