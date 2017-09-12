@@ -41,6 +41,6 @@ void AsObjectFamily::Release()
 	mParent = nullptr;
 	// Release every child
 	AsObjectMapIter iter;
-	for (iter = mChildren.begin(); iter != mChildren.end(); iter++)
+	for (iter = mChildren.begin(); iter != mChildren.end(); ++iter)
 		delete iter->second;
 }

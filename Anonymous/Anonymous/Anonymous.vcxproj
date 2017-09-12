@@ -68,8 +68,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AsCamera.h" />
+    <ClInclude Include="AsInputEvent.h" />
     <ClInclude Include="AsObject.h" />
     <ClInclude Include="AsObjectFamily.h" />
+    <ClInclude Include="AsEmptyObject.h" />
+    <ClInclude Include="AsPolygon.h" />
     <ClInclude Include="AsScene.h" />
     <ClInclude Include="AsWindow.h" />
   </ItemGroup>

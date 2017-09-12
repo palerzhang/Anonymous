@@ -8,7 +8,7 @@ string AsObject::UniqueName(string name)
 	AsObjectMap brothers = GetParent()->GetChildren();
 	AsObjectMapIter iter;
 	int cnt = 0;
-	for (iter = brothers.begin(); iter != brothers.end(); iter++)
+	for (iter = brothers.begin(); iter != brothers.end(); ++iter)
 	{
 		if (iter->first == name)
 			cnt++;
@@ -22,9 +22,11 @@ AsObject::AsObject(AsObject * parent, string name)
 {
 	mTransform = AsTransform(AsIdentity);
 	mWorldSpace = AsTransform(AsIdentity);
-	mFamily = nullptr;
+	mFamily = new AsObjectFamily(parent);;
 	mName = name;
-	Attach(parent);
+	// If the parent is specified, then attach it
+	if (nullptr != parent)
+		Attach(parent);
 }
 
 AsObject::~AsObject()
@@ -73,6 +75,7 @@ void AsObject::Attach(AsObject * parent)
 	}
 	else
 		mFamily = new AsObjectFamily(parent);
+	// unique the name when attach
 	mName = UniqueName(mName);
 
 	// add this object ot parent's children list
@@ -84,6 +87,7 @@ void AsObject::Attach(AsObject * parent)
 void AsObject::Unattach()
 {
 	AsObject * parent = GetParent();
+	// If no parent, need not un-attach
 	if (nullptr == parent)
 		return;
 	// Erase this object from its parent
@@ -91,6 +95,13 @@ void AsObject::Unattach()
 	// Reset the transform
 	mTransform = parent->GetWorldSpace().transform(mTransform);
 	mWorldSpace = mTransform;
+}
+
+void AsObject::RemoveChildren()
+{
+	// Release @mFamily
+	if (nullptr != mFamily)
+		delete mFamily;
 }
 
 void AsObject::Copy(AsObject * dst)

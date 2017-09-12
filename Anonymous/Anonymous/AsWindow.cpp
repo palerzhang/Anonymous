@@ -1,4 +1,5 @@
 #include "AsWindow.h"
+#include "Foundation\AsPreprocessor.h"
 
 /*
 \ Version 1.0.0
@@ -9,17 +10,20 @@ AsWindow * AsWindow::sInstanceHandleEvents = nullptr;
 
 void AsWindow::DispatchKeyboardEvents(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
+	AS_UNUSED(window);
+	AS_UNUSED(scancode);
 	if (AsWindow::sInstanceHandleEvents)
-		AsWindow::sInstanceHandleEvents->KeyboardEvent(window, key, scancode, action, mode);
+		AsWindow::sInstanceHandleEvents->KeyboardEvent(AsKeyCode(key), AsKeyAction(action), AsModifierCode(mode));
 }
 
 void AsWindow::DispatchMouseEvents(GLFWwindow* window, int button, int action, int mode)
 {
+	AS_UNUSED(window);
 	if (AsWindow::sInstanceHandleEvents)
-		AsWindow::sInstanceHandleEvents->MouseEvent(window, button, action, mode);
+		AsWindow::sInstanceHandleEvents->MouseEvent(AsMouseCode(button), AsMouseAction(action), AsModifierCode(mode));
 }
 
-void AsWindow::Draw(float interpolation)
+void AsWindow::Render(float interpolation)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -54,13 +58,13 @@ GLFWwindow* AsWindow::CreateDefaultWindow()
 	return glfwCreateWindow(mWidth, mHeight, mTitle.c_str(), nullptr, nullptr);
 }
 
-void AsWindow::KeyboardEvent(GLFWwindow* window, int key, int scancode, int action, int mode)
+void AsWindow::KeyboardEvent(AsKeyCode key, AsKeyAction action, AsModifierCode mod)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
+	if (key == AsKeyCode::KEY_ESCAPE && action == AsKeyAction::KEY_PRESS)
+		glfwSetWindowShouldClose(mWindow, GL_TRUE);
 }
 
-void AsWindow::MouseEvent(GLFWwindow* window, int button, int action, int mode)
+void AsWindow::MouseEvent(AsMouseCode button, AsMouseAction action, AsModifierCode mod)
 {
 	// TODO
 }
@@ -74,6 +78,9 @@ void AsWindow::OnClose()
 		mState = WINDOW_STATE_CLOSED;
 		if (this != AsWindow::sInstanceHandleEvents)
 			AsWindow::sInstanceHandleEvents = nullptr;
+
+		if (nullptr != mScene)
+			delete mScene;
 	}
 }
 
@@ -99,7 +106,7 @@ void AsWindow::MainLoop()
 			loops++;
 		}
 		interpolation = float(glfwGetTime() + SKIP_TICKS - next_game_tick) / float(SKIP_TICKS);
-		Draw(interpolation);
+		Render(interpolation);
 	}
 }
 
@@ -149,46 +156,94 @@ void AsWindow::SetTitle(string str)
 	mTitle = str;
 }
 
-void AsWindow::SetResizable(bool resizable)
+void AsWindow::SetWindowFlag(AsWindowFlag flag, bool enable)
 {
-	mResizable = resizable;
-}
-
-void AsWindow::SetVisible(bool visible)
-{
-	mVisible = visible;
-}
-
-void AsWindow::SetFrameless(bool frameless)
-{
-	mFrameless = frameless;
-}
-
-void AsWindow::SetFloating(bool floating)
-{
-	mFloating = floating;
-}
-
-void AsWindow::SetMaximized(bool miximized)
-{
-	mMaximized = miximized;
-}
-
-void AsWindow::SetFullScreen(bool fullScreen)
-{
-	mFullScreen = fullScreen;
-
-	if (nullptr == mWindow || nullptr != mMonitor)
-		return;
-
-	if (mFullScreen)
+	switch (flag)
 	{
-		const GLFWvidmode* mode = glfwGetVideoMode(mMonitor);
-		glfwSetWindowMonitor(mWindow, mMonitor, mPosX, mPosY, mWidth, mHeight, mode->refreshRate);
+	case AsWindowFlag::WINDOW_FLAG_RESIZABLE:
+	{
+		mResizable = enable;
 	}
-	else
+		break;
+	case AsWindowFlag::WINDOW_FLAG_VISIBLE:
 	{
-		glfwSetWindowMonitor(mWindow, nullptr, mPosX, mPosY, mWidth, mHeight, 0);
+		mVisible = enable;
+	}
+		break;
+	case AsWindowFlag::WINDOW_FLAG_FRAMELESS:
+	{
+		mFrameless = enable;
+	}
+		break;
+	case AsWindowFlag::WINDOW_FLAG_FLOATING:
+	{
+		mFloating = enable;
+	}
+		break;
+	case AsWindowFlag::WINDOW_FLAG_FULLSCREEN:
+	{
+		mMaximized = enable;
+	}
+		break;
+	case AsWindowFlag::WINDOW_FLAG_MAXIMIZED:
+	{
+		mFullScreen = enable;
+
+		if (nullptr == mWindow || nullptr != mMonitor)
+			return;
+
+		if (mFullScreen)
+		{
+			const GLFWvidmode* mode = glfwGetVideoMode(mMonitor);
+			glfwSetWindowMonitor(mWindow, mMonitor, mPosX, mPosY, mWidth, mHeight, mode->refreshRate);
+		}
+		else
+		{
+			glfwSetWindowMonitor(mWindow, nullptr, mPosX, mPosY, mWidth, mHeight, 0);
+		}
+	}
+		break;
+	}
+}
+
+bool AsWindow::GetWindowFlag(AsWindowFlag flag)
+{
+	switch (flag)
+	{
+	case AsWindowFlag::WINDOW_FLAG_RESIZABLE:
+	{
+		return mResizable;
+	}
+		break;
+	case AsWindowFlag::WINDOW_FLAG_VISIBLE:
+	{
+		return mVisible;
+	}
+		break;
+	case AsWindowFlag::WINDOW_FLAG_FRAMELESS:
+	{
+		return mFrameless;
+	}
+		break;
+	case AsWindowFlag::WINDOW_FLAG_FLOATING:
+	{
+		return mFloating;
+	}
+		break;
+	case AsWindowFlag::WINDOW_FLAG_FULLSCREEN:
+	{
+		return mMaximized;
+	}
+		break;
+	case AsWindowFlag::WINDOW_FLAG_MAXIMIZED:
+	{
+		return mFullScreen;
+	}
+		break;
+	default:
+	{
+		return false;
+	}
 	}
 }
 
@@ -215,36 +270,6 @@ int AsWindow::y()
 string AsWindow::title()
 {
 	return mTitle;
-}
-
-bool AsWindow::resizable()
-{
-	return mResizable; 
-}
-
-bool AsWindow::visible()
-{
-	return mVisible;
-}
-
-bool AsWindow::frameless()
-{
-	return mFrameless;
-}
-
-bool AsWindow::floating()
-{
-	return mFloating;
-}
-
-bool AsWindow::maximized()
-{
-	return mMaximized;
-}
-
-bool AsWindow::fullScreen()
-{
-	return mFullScreen;
 }
 
 AsWindowState AsWindow::state()
@@ -281,7 +306,6 @@ int AsWindow::exec()
 	
 	glfwMakeContextCurrent(mWindow);
 	CurrentInstanceHandleEvents();
-
 	glfwSetKeyCallback(mWindow, DispatchKeyboardEvents);
 	glfwSetMouseButtonCallback(mWindow, DispatchMouseEvents);
 

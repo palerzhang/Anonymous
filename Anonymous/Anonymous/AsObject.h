@@ -7,8 +7,12 @@
 
 using namespace std;
 
+/*
+\ Base class of object
+*/
 class AsObject
 {
+protected:
 	/*
 	\ Name of this object
 	*/
@@ -79,6 +83,10 @@ public:
 	*/
 	void Unattach();
 	/*
+	\ Remove all children objects under this object
+	*/
+	virtual void RemoveChildren();
+	/*
 	\ Copy this object to @dst
 	*/
 	virtual void Copy(AsObject * dst);
@@ -86,6 +94,17 @@ public:
 	\ Release the memory of this object, besides its children
 	*/
 	virtual void Release();
+	/*
+	\ Update the object's state
+	\ i.e. @mTransform
+	*/
+	virtual void Update(float dt) { AS_UNUSED(dt); };
+	/*
+	\ Render the object with @interpolation
+	\ Note that @interpolation can be unused
+	\ Must be specified
+	*/
+	virtual void Render(float interpolation) = 0;
 };
 
 #endif
