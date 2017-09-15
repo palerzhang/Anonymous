@@ -43,4 +43,9 @@ inline float AsSqrt(float x)
 	return sqrtf(x);
 }
 
+inline void AsRestrict(float & target, float low, float up)
+{
+	target = target < low ? low : (target > up ? up : target);
+}
+
 #endif

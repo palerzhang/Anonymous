@@ -4,6 +4,7 @@
 #include "AsObject.h"
 #include "AsVertexData.h"
 #include "AsShader.h"
+#include "Foundation\AsColor.h"
 
 /*
 \ The polygon class.
@@ -23,6 +24,10 @@ protected:
 	\ Vertex of the polygon
 	*/
 	AsVertexData * mVertex;
+	/*
+	\ Color
+	*/
+	AsColor mColor;
 	/*
 	\ Shader of this polygon
 	*/
