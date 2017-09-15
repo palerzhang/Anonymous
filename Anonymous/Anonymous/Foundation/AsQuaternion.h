@@ -53,6 +53,20 @@ public:
 	inline AsQuaternion(const AsQuaternion& v) : x(v.x), y(v.y), z(v.z), w(v.w)
 	{
 	}
+	/*
+	\ Construct with eular angles
+	*/
+	inline AsQuaternion(const AsVector3 & eular)
+	{
+		float sinhx = sin(eular.x / 2.0f); float coshx = cos(eular.x / 2.0f);
+		float sinhy = sin(eular.y / 2.0f); float coshy = cos(eular.y / 2.0f);
+		float sinhz = sin(eular.z / 2.0f); float coshz = cos(eular.z / 2.0f);
+		
+		x = sinhy*sinhz*coshx + coshy*coshz*sinhx;
+		y = sinhy*coshz*coshx + coshy*sinhz*sinhx;
+		z = coshy*sinhz*coshx - sinhy*coshz*sinhx;
+		w = coshy*coshz*coshx - sinhy*sinhz*sinhx;
+	}
 
 	/**
 	\brief returns true if quat is identity

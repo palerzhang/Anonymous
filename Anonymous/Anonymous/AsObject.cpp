@@ -97,6 +97,16 @@ void AsObject::Unattach()
 	mWorldSpace = mTransform;
 }
 
+void AsObject::SetPosition(float x, float y, float z)
+{
+	mTransform.p = AsVector3(x, y, z);
+}
+
+void AsObject::SetRotation(float x, float y, float z)
+{
+	mTransform.q = AsQuaternion(AsVector3(x, y, z));
+}
+
 void AsObject::RemoveChildren()
 {
 	// Release @mFamily

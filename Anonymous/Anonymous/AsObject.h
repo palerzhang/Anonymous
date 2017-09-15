@@ -83,6 +83,14 @@ public:
 	*/
 	void Unattach();
 	/*
+	\ Set the position of this object
+	*/
+	inline void SetPosition(float x, float y, float z);
+	/*
+	\ Set the rotation around x-axis, y-axis, z-axis
+	*/
+	void SetRotation(float x, float y, float z);
+	/*
 	\ Remove all children objects under this object
 	*/
 	virtual void RemoveChildren();

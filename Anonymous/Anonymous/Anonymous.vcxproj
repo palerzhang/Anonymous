@@ -74,6 +74,8 @@
     <ClInclude Include="AsEmptyObject.h" />
     <ClInclude Include="AsPolygon.h" />
     <ClInclude Include="AsScene.h" />
+    <ClInclude Include="AsShader.h" />
+    <ClInclude Include="AsVertexData.h" />
     <ClInclude Include="AsWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +83,8 @@
     <ClCompile Include="AsObject.cpp" />
     <ClCompile Include="AsObjectFamily.cpp" />
     <ClCompile Include="AsScene.cpp" />
+    <ClCompile Include="AsShader.cpp" />
+    <ClCompile Include="AsVertexData.cpp" />
     <ClCompile Include="AsWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
