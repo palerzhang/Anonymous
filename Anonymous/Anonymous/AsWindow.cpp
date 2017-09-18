@@ -1,5 +1,7 @@
+#include <glad/glad.h>
 #include "AsWindow.h"
 #include "Foundation\AsPreprocessor.h"
+#include "AsPolygon.h"
 
 /*
 \ Version 1.0.0
@@ -28,11 +30,7 @@ void AsWindow::Render(float interpolation)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glBegin(GL_TRIANGLES);
-	glVertex3f(-0.5f, -0.5f, 0.0f);
-	glVertex3f(0.5f, -0.5f, 0.0f);
-	glVertex3f(0.0f, 0.5f, 0.0f);
-	glEnd();
+	mScene->Render(interpolation);
 
 	glfwSwapBuffers(mWindow);
 }
@@ -130,6 +128,8 @@ AsWindow::AsWindow(int posx, int posy, int w, int h, string title)
 	TICKS_PER_SECOND = 25;
 	SKIP_TICKS = 1.0f / TICKS_PER_SECOND;
 	MAX_FRAME_SKIP = 5;
+
+	mScene = nullptr;
 }
 
 AsWindow::~AsWindow()
@@ -309,9 +309,30 @@ int AsWindow::exec()
 	glfwSetKeyCallback(mWindow, DispatchKeyboardEvents);
 	glfwSetMouseButtonCallback(mWindow, DispatchMouseEvents);
 
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return -1;
+	}
+
 	int width, height;
 	glfwGetFramebufferSize(mWindow, &width, &height);
 	glViewport(0, 0, width, height);
+
+	mScene = new AsScene("Scene0");
+
+	AsPolygon * polygon = new AsPolygon("poly", mScene->mRoot);
+	polygon->mColor = AsColor(1.0f, 0.0f, 0.0f, 1.0f);
+
+	float pos[9] =
+	{
+		0.0f, 0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f
+	};
+
+	polygon->mShader->PropareAndProcessShader();
+	polygon->mVertex->LoadData(pos, FLAG_POSITION_ONLY, 3, nullptr, 0, GL_STATIC_DRAW);
 
 	MainLoop();
 	

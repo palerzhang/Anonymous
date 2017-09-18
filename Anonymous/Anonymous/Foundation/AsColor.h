@@ -24,13 +24,13 @@ public:
 		r = c.r; g = c.g; b = c.b; a = c.a;
 		return *this;
 	}
-
-	// color prefab
-	static const AsColor White;
-	static const AsColor Black;
 };
 
-const AsColor AsColor::White = AsColor(1.0f, 1.0f, 1.0f, 1.0f);
-const AsColor AsColor::Black = AsColor(0.0f, 0.0f, 0.0f, 1.0f);
+namespace Color
+{
+	const AsColor _White = AsColor(1.0f, 1.0f, 1.0f, 1.0f);
+	const AsColor _Black = AsColor(0.0f, 0.0f, 0.0f, 1.0f);
+}
+
 
 #endif

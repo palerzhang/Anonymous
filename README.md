@@ -2,9 +2,9 @@
 
 Welcome :)
 
-OpenGL is required over version 3.0
+OpenGL is required over version 4.0
 
-With: GLEW(2.1.0), GLFW(3.2.1)
+With: GLFW(3.2.1), GLAD(build in gl 4.0)
 
 Please use VS2013(VC12).
 
@@ -21,9 +21,11 @@ Please use VS2013(VC12).
 5. Configure the library that you need to use. Choose static or dynamic library:
 
 For adopting static library:
-- Using GLEW_STATIC in code
-- Using glew32s.lib, glfw3.lib, opengl32.lib
+- Using glfw3.lib, opengl32.lib
 
 For adopting dynamic library:
-- No GLEW_STATIC in code
-- Using glew32.lib, glfw3dll.lib, opengl32.lib
+- Using glfw3dll.lib, opengl32.lib
+
+*Addition
+GLAD configuration: https://learnopengl-cn.github.io/01%20Getting%20started/02%20Creating%20a%20window/
+

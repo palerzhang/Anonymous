@@ -10,18 +10,15 @@
 \ The polygon class.
 \ Polygon is usually used in 2D (3D is ok)
 \ Draw polygon along vertices one by one
-\ 1. Use constructor to create an instance
-		But the memory of arrays is not allocated yet
-\ 2. Allocate memory
-\ 3. Set elements in arrays
-\ 4. Free the memory
 */
 
 class AsPolygon : public AsObject
 {
-protected:
+public:
 	/*
 	\ Vertex of the polygon
+	\ We do not suggest to change the contents of it
+	\	as this may reduce the performance 
 	*/
 	AsVertexData * mVertex;
 	/*
@@ -32,6 +29,22 @@ protected:
 	\ Shader of this polygon
 	*/
 	AsShader * mShader;
+	/*
+	\ Constructor
+	*/
+	AsPolygon(string name = "New Object", AsObject * parent = nullptr);
+	/*
+	\ Deconstructor
+	*/
+	~AsPolygon();
+	/*
+	\ Free the memory
+	*/
+	void Release() override;
+	/*
+	\ Render the shape
+	*/
+	void Render(float interpolation) override;
 };
 
 #endif

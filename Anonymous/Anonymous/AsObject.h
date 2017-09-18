@@ -14,14 +14,6 @@ class AsObject
 {
 protected:
 	/*
-	\ Name of this object
-	*/
-	string mName;
-	/*
-	\ The transform under its parent
-	*/
-	AsTransform mTransform;
-	/*
 	\ The transform under world space
 	\ Always use this @mWorldSpace to transform vertex
 	\  Before use @mWorldSpace, always re-calculate it
@@ -43,15 +35,19 @@ protected:
 
 public:
 	/*
+	\ Name of this object
+	*/
+	string mName;
+	/*
+	\ The transform under its parent
+	*/
+	AsTransform mTransform;
+	/*
 	\ The @parent must be specified
 	\ The @name can use default
 	*/
-	AsObject(AsObject * parent, string name = "New Object");
+	AsObject(string name = "New Object", AsObject * parent = nullptr);
 	~AsObject();
-	/*
-	\ Get the @mTransform of this object
-	*/
-	const AsTransform & GetTransform();
 	/*
 	\ Get the @mWorldSpace of this object
 	*/

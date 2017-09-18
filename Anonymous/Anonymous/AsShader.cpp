@@ -1,6 +1,5 @@
 #include "AsShader.h"
-#include "GLEW\glew.h"
-
+#include <glad\glad.h>
 #include <string>
 
 string TypeName[3] = 
@@ -13,6 +12,8 @@ string TypeName[3] =
 AsShader::AsShader()
 {
 	mID = -1;
+	mVertFile = "Shader\\fragment\\default2d.frag";
+	mFragFile = "Shader\\vertex\\default2d.vert";
 }
 
 AsShader::~AsShader()
@@ -64,7 +65,13 @@ void AsShader::SetMatrix4x4(const char * name) const
 {
 }
 
-void AsShader::PropareAndProcessShader(const char * vertexFile, const char * fragmentFille)
+void AsShader::SetShaderFile(const string & vertFile, const string & fragFile)
+{
+	mVertFile = vertFile;
+	mFragFile = fragFile;
+}
+
+void AsShader::PropareAndProcessShader()
 {
 	string vertexCode;
 	string fragmentCode;
@@ -77,8 +84,8 @@ void AsShader::PropareAndProcessShader(const char * vertexFile, const char * fra
 	try
 	{
 		// open files
-		vShaderFile.open(vertexFile);
-		fShaderFile.open(fragmentFille);
+		vShaderFile.open(mVertFile);
+		fShaderFile.open(mFragFile);
 		stringstream vShaderStream, fShaderStream;
 		// read file's buffer contents into streams
 		vShaderStream << vShaderFile.rdbuf();
@@ -95,7 +102,7 @@ void AsShader::PropareAndProcessShader(const char * vertexFile, const char * fra
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 	}
 	const char* vShaderCode = vertexCode.c_str();
-	const char * fShaderCode = fragmentCode.c_str();
+	const char* fShaderCode = fragmentCode.c_str();
 	// compile shaders
 	unsigned int vertex, fragment;
 	// vertex shader

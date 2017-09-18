@@ -1,61 +1,69 @@
 #ifndef _ANONYMOUS_VERTEX_DATA_H_
 #define _ANONYMOUS_VERTEX_DATA_H_
 
-typedef unsigned int AsVertexFlag;
 typedef unsigned int AsUint;
 
-// Position of vertex
-#define AS_POSITION		1 << 0
-// Normal of vertex
-#define AS_NORMAL		1 << 1
+enum AsLoadFlag
+{
+	FLAG_POSITION_ONLY = 0,
+	FLAG_NORMAL_ONLY,
+	FLAG_POSITION_NORMAL,
+	FLAG_NORMAL_POSITION
+};
+
+#define ATTRIBUTE_POSITION_POSITION 0
+#define ATTRIBUTE_POSITION_NORMAL	1
 
 class AsVertexData
 {
 	/*
-	\ @mFlag shows that which part of values is stored
-	\ This must be specified while create the instance
-	\ Note that this cannot be changed
+	\ Vertex Array Object
 	*/
-	AsVertexFlag mFlag;
+	AsUint mVAO;
+	/*
+	\ Vertex Buffer Object
+	*/
+	AsUint mVBO;
+	/*
+	\ Element Buffer Object
+	*/
+	AsUint mEBO;
+	/*
+	\ Data loaded
+	*/
+	bool mLoaded;
 
 public:
 	/*
-	\ Array that store the position, color and normal of a vertex information
-	\ The position, color and normal of a vertex are stored one by one
-	\ i.e. 3d position, rgba color and normal
-	\ |x|y|z|nx|ny|nz|
-	\ | pos | normal |
-	\ |    vertex    |
-	*/
-	float * mData;
-	/*
-	\ Count of the vertices
+	\ Count of the vertices to draw (using indices)
 	*/
 	AsUint mCount;
 	/*
 	\ Constructor of @AsVertexData, must specified data flag
 	*/
-	AsVertexData(AsVertexFlag flag);
+	AsVertexData();
 	/*
 	\ Deconstructor
 	*/
 	~AsVertexData();
 	/*
-	\ Allocate memory of @mData and @mSingleColor
-	\ according to @num and @mFlag
-	*/
-	void Allocate(int num);
-	/*
 	\ Load data
-	\ @position: the position of vertices
-	\ @normal: the normal of vertices
-	\ Note that position must be specified.
+	\ @data: the data of vertex
+	\ @flag: flag tells the function how to read the data
+	\ @vsize: the size of vertices (note that not equal to size of @data)
+	\ @indices: indices of rendering order (nullptr then use default)
+	\ @isize: size of indices
+	\ @usage: how to render
 	*/
-	void LoadData(float * position, float * normal);
+	void LoadData(const float * data, AsLoadFlag flag, AsUint vsize, const AsUint * indices, AsUint isize, AsUint usage);
 	/*
 	\ Free the memory
 	*/
 	void Release();	
+	/*
+	\ Render vertex
+	*/
+	void RenderSelf(AsUint mode);
 };
 
 #endif

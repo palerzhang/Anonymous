@@ -16,6 +16,8 @@ enum CompileType
 
 class AsShader
 {
+	string mVertFile;
+	string mFragFile;
 public:
 	AsShader();
 	~AsShader();
@@ -30,8 +32,9 @@ public:
 	inline void SetFloat4v(const char * name, const float * vec) const;
 	inline void SetMatrix4x4(const char * name) const;
 
-	void PropareAndProcessShader(const char * vertexFile, const char * fragmentFille);
-	inline void Use();
+	void SetShaderFile(const string & vertFile, const string & fragFile);
+	void PropareAndProcessShader();
+	void Use();
 
 	static void CheckCompileStates(unsigned int shaderId, CompileType type);
 private:

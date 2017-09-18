@@ -40,6 +40,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>D:\Projects\Personal\Anonymous\Anonymous\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Projects\Personal\Anonymous\Anonymous\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -49,7 +50,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;glfw3dll.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3dll.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,10 +83,12 @@
     <ClCompile Include="AsCamera.cpp" />
     <ClCompile Include="AsObject.cpp" />
     <ClCompile Include="AsObjectFamily.cpp" />
+    <ClCompile Include="AsPolygon.cpp" />
     <ClCompile Include="AsScene.cpp" />
     <ClCompile Include="AsShader.cpp" />
     <ClCompile Include="AsVertexData.cpp" />
     <ClCompile Include="AsWindow.cpp" />
+    <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

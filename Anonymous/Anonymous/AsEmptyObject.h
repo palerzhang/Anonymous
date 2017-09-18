@@ -9,14 +9,14 @@
 class AsEmptyObject : public AsObject
 {
 public:
-	AsEmptyObject(AsObject * parent, string name = "New Object")
-		: AsObject(parent, name){}
+	AsEmptyObject(string name = "New Object", AsObject * parent = nullptr)
+		: AsObject(name, parent){}
 	~AsEmptyObject(){ Release(); }
 	/*
 	\ Render the object with @interpolation
 	\ Note that @interpolation can be unused
 	*/
-	virtual void Render(float interpolation) override
+	void Render(float interpolation) override
 	{
 		AsObjectMap children = GetChildren();
 		AsObjectMapIter iter;

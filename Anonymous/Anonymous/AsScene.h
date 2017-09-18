@@ -13,6 +13,7 @@ using namespace std;
 */
 class AsScene
 {
+public:
 	/*
 	\ Name of this scene
 	*/
@@ -26,7 +27,6 @@ class AsScene
 	*/
 	AsEmptyObject * mRoot;
 
-public:
 	AsScene(string name = "New Scene");
 	~AsScene();
 	/*

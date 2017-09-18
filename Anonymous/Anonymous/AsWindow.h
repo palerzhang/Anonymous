@@ -2,7 +2,7 @@
 #define _ANONYMOUS_WINDOW_H_
 
 #include <string>
-#include "GLFW/glfw3.h"
+#include "GLFW\glfw3.h"
 #include "AsScene.h"
 #include "AsInputEvent.h"
 
@@ -86,10 +86,6 @@ class AsWindow
 	GLFWwindow* mWindow;
 	GLFWmonitor* mMonitor;
 	/*
-	\ Scene that this window contains
-	*/
-	AsScene* mScene;
-	/*
 	\ The window that handles events from mouse, keyboard and other 
 	*/
 	static AsWindow * sInstanceHandleEvents;
@@ -130,6 +126,11 @@ protected:
 	virtual void MainLoop();
 
 public:
+	/*
+	\ Scene that this window contains
+	*/
+	AsScene* mScene;
+
 	AsWindow(int posx, int posy, int w, int h, string title);
 	~AsWindow();
 	

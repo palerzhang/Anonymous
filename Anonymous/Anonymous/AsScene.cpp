@@ -3,7 +3,7 @@
 AsScene::AsScene(string name)
 {
 	mName = name;
-	mRoot = new AsEmptyObject(nullptr, "__AsObjectRoot__");
+	mRoot = new AsEmptyObject("__AsObjectRoot__", nullptr);
 }
 
 AsScene::~AsScene()

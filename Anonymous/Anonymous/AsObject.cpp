@@ -18,7 +18,7 @@ string AsObject::UniqueName(string name)
 	return name;
 }
 
-AsObject::AsObject(AsObject * parent, string name)
+AsObject::AsObject(string name, AsObject * parent)
 {
 	mTransform = AsTransform(AsIdentity);
 	mWorldSpace = AsTransform(AsIdentity);
@@ -32,11 +32,6 @@ AsObject::AsObject(AsObject * parent, string name)
 AsObject::~AsObject()
 {
 	Release();
-}
-
-const AsTransform & AsObject::GetTransform()
-{
-	return mTransform;
 }
 
 const AsTransform & AsObject::GetWorldSpace()
