@@ -41,6 +41,10 @@ public:
 	\ Render this scene
 	*/
 	void Render(float interpolation);
+	/*
+	\ Compile all shaders
+	*/
+	void PrepareAndCompileShaders();
 };
 
 #endif

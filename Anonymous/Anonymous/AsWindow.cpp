@@ -1,4 +1,3 @@
-#include <glad/glad.h>
 #include "AsWindow.h"
 #include "Foundation\AsPreprocessor.h"
 #include "AsPolygon.h"
@@ -25,6 +24,13 @@ void AsWindow::DispatchMouseEvents(GLFWwindow* window, int button, int action, i
 		AsWindow::sInstanceHandleEvents->MouseEvent(AsMouseCode(button), AsMouseAction(action), AsModifierCode(mode));
 }
 
+void AsWindow::DispatchResizeEvents(GLFWwindow* window, int width, int height)
+{
+	AS_UNUSED(window);
+	if (AsWindow::sInstanceHandleEvents)
+		AsWindow::sInstanceHandleEvents->ResizeEvent(width, height);
+}
+
 void AsWindow::Render(float interpolation)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -33,6 +39,46 @@ void AsWindow::Render(float interpolation)
 	mScene->Render(interpolation);
 
 	glfwSwapBuffers(mWindow);
+}
+
+void AsWindow::InitWindowEnvironment()
+{
+	if (mState != WINDOW_STATE_UNSTART)
+		return;
+
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	glfwWindowHint(GLFW_RESIZABLE, mResizable);
+	glfwWindowHint(GLFW_VISIBLE, mVisible);
+	glfwWindowHint(GLFW_DECORATED, !mFrameless);
+	glfwWindowHint(GLFW_FLOATING, mFloating);
+	glfwWindowHint(GLFW_MAXIMIZED, mMaximized);
+
+	if (mFullScreen)
+		mWindow = CreateFullScreenWindow();
+	else
+		mWindow = CreateDefaultWindow();
+
+	if (nullptr == mWindow)
+	{
+		glfwTerminate();
+		return;
+	}
+
+	glfwMakeContextCurrent(mWindow);
+	CurrentInstanceHandleEvents();
+	glfwSetKeyCallback(mWindow, DispatchKeyboardEvents);
+	glfwSetMouseButtonCallback(mWindow, DispatchMouseEvents);
+	glfwSetFramebufferSizeCallback(mWindow, DispatchResizeEvents);
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return;
+	}
 }
 
 GLFWwindow* AsWindow::CreateFullScreenWindow()
@@ -65,6 +111,11 @@ void AsWindow::KeyboardEvent(AsKeyCode key, AsKeyAction action, AsModifierCode m
 void AsWindow::MouseEvent(AsMouseCode button, AsMouseAction action, AsModifierCode mod)
 {
 	// TODO
+}
+
+void AsWindow::ResizeEvent(int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
 
 void AsWindow::OnClose()
@@ -108,7 +159,12 @@ void AsWindow::MainLoop()
 	}
 }
 
-AsWindow::AsWindow(int posx, int posy, int w, int h, string title)
+void AsWindow::PrepareAndCompileShaders()
+{
+	mScene->PrepareAndCompileShaders();
+}
+
+AsWindow::AsWindow(int posx, int posy, int w, int h, const string & title)
 {
 	mPosX = posx;
 	mPosY = posy;
@@ -279,60 +335,11 @@ AsWindowState AsWindow::state()
 
 int AsWindow::exec()
 {
-	if (mState != WINDOW_STATE_UNSTART)
-		return -1;
+	InitWindowEnvironment();
 
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	ConstructScene();
 
-	glfwWindowHint(GLFW_RESIZABLE, mResizable);
-	glfwWindowHint(GLFW_VISIBLE, mVisible);
-	glfwWindowHint(GLFW_DECORATED, !mFrameless);
-	glfwWindowHint(GLFW_FLOATING, mFloating);
-	glfwWindowHint(GLFW_MAXIMIZED, mMaximized);
-
-	if (mFullScreen)
-		mWindow = CreateFullScreenWindow();
-	else
-		mWindow = CreateDefaultWindow();
-
-	if (nullptr == mWindow)
-	{
-		glfwTerminate();
-		return -1;
-	}
-	
-	glfwMakeContextCurrent(mWindow);
-	CurrentInstanceHandleEvents();
-	glfwSetKeyCallback(mWindow, DispatchKeyboardEvents);
-	glfwSetMouseButtonCallback(mWindow, DispatchMouseEvents);
-
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
-
-	int width, height;
-	glfwGetFramebufferSize(mWindow, &width, &height);
-	glViewport(0, 0, width, height);
-
-	mScene = new AsScene("Scene0");
-
-	AsPolygon * polygon = new AsPolygon("poly", mScene->mRoot);
-	polygon->mColor = AsColor(1.0f, 0.0f, 0.0f, 1.0f);
-
-	float pos[9] =
-	{
-		0.0f, 0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f
-	};
-
-	polygon->mShader->PropareAndProcessShader();
-	polygon->mVertex->LoadData(pos, FLAG_POSITION_ONLY, 3, nullptr, 0, GL_STATIC_DRAW);
+	PrepareAndCompileShaders();
 
 	MainLoop();
 	

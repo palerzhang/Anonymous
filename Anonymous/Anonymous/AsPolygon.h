@@ -45,6 +45,10 @@ public:
 	\ Render the shape
 	*/
 	void Render(float interpolation) override;
+	/*
+	\ 
+	*/
+	void PrepareAndCompileShaders() override;
 };
 
 #endif

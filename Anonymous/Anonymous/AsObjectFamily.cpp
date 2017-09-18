@@ -43,4 +43,5 @@ void AsObjectFamily::Release()
 	AsObjectMapIter iter;
 	for (iter = mChildren.begin(); iter != mChildren.end(); ++iter)
 		delete iter->second;
+	mChildren.clear();
 }

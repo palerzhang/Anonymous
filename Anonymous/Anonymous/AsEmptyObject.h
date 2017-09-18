@@ -11,17 +11,23 @@ class AsEmptyObject : public AsObject
 public:
 	AsEmptyObject(string name = "New Object", AsObject * parent = nullptr)
 		: AsObject(name, parent){}
-	~AsEmptyObject(){ Release(); }
+
+protected:
 	/*
 	\ Render the object with @interpolation
 	\ Note that @interpolation can be unused
 	*/
 	void Render(float interpolation) override
 	{
-		AsObjectMap children = GetChildren();
-		AsObjectMapIter iter;
-		for (iter = children.begin(); iter != children.end(); iter++)
-			iter->second->Render(interpolation);
+		// Nothing
+	}
+	/*
+	\ Compile the children
+	\ Empty object is un-drawable
+	*/
+	void PrepareAndCompileShaders() override
+	{
+		// Nothing
 	}
 };
 

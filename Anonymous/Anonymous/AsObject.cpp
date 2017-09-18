@@ -118,5 +118,38 @@ void AsObject::Release()
 {
 	// Release @mFamily
 	if (nullptr != mFamily)
+	{
 		delete mFamily;
+		mFamily = nullptr;
+	}
+}
+
+void AsObject::_Update(float dt) 
+{ 
+	Update(dt);
+
+	AsObjectMap children = GetChildren();
+	AsObjectMapIter iter;
+	for (iter = children.begin(); iter != children.end(); iter++)
+		iter->second->_Update(dt);
+}
+
+void AsObject::_Render(float interpolation)
+{
+	Render(interpolation);
+
+	AsObjectMap children = GetChildren();
+	AsObjectMapIter iter;
+	for (iter = children.begin(); iter != children.end(); iter++)
+		iter->second->_Render(interpolation);
+}
+
+void AsObject::_PrepareAndCompileShaders()
+{
+	PrepareAndCompileShaders();
+
+	AsObjectMap children = GetChildren();
+	AsObjectMapIter iter;
+	for (iter = children.begin(); iter != children.end(); iter++)
+		iter->second->_PrepareAndCompileShaders();
 }

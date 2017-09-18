@@ -1,5 +1,4 @@
 #include "AsShader.h"
-#include <glad\glad.h>
 #include <string>
 
 string TypeName[3] = 
@@ -12,57 +11,13 @@ string TypeName[3] =
 AsShader::AsShader()
 {
 	mID = -1;
-	mVertFile = "Shader\\fragment\\default2d.frag";
-	mFragFile = "Shader\\vertex\\default2d.vert";
+	mVertFile = "Shader\\vertex\\default2d.vert";
+	mFragFile = "Shader\\fragment\\default2d.frag";
 }
 
 AsShader::~AsShader()
 {
 	// Nothing yet
-}
-
-void AsShader::SetBool(const char * name, bool value) const
-{
-	glUniform1i(glGetUniformLocation(mID, name), (int)value);
-}
-
-void AsShader::SetInt(const char * name, int value) const
-{
-	glUniform1i(glGetUniformLocation(mID, name), value);
-}
-
-void AsShader::SetFloat(const char * name, float value) const
-{
-	glUniform1f(glGetUniformLocation(mID, name), value);
-}
-
-void AsShader::SetUint(const char * name, unsigned int value) const
-{
-	glUniform1ui(glGetUniformLocation(mID, name), value);
-}
-
-void AsShader::SetFloat3(const char * name, float value0, float value1, float value2) const
-{
-	glUniform3f(glGetUniformLocation(mID, name), value0, value1, value2);
-}
-
-void AsShader::SetFloat4(const char * name, float value0, float value1, float value2, float value3) const
-{
-	glUniform4f(glGetUniformLocation(mID, name), value0, value1, value2, value3);
-}
-
-void AsShader::SetFloat3v(const char * name, const float * vec) const
-{
-	glUniform3fv(glGetUniformLocation(mID, name), 3, vec);
-}
-
-void AsShader::SetFloat4v(const char * name, const float * vec) const
-{
-	glUniform3fv(glGetUniformLocation(mID, name), 4, vec);
-}
-
-void AsShader::SetMatrix4x4(const char * name) const
-{
 }
 
 void AsShader::SetShaderFile(const string & vertFile, const string & fragFile)
@@ -126,6 +81,8 @@ void AsShader::PropareAndProcessShader()
 void AsShader::Use()
 {
 	glUseProgram(mID);
+
+	int id = glGetUniformLocation(mID, "_Color");
 }
 
 void AsShader::CheckCompileStates(unsigned int shaderId, CompileType type)

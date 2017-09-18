@@ -32,6 +32,22 @@ protected:
 	\ Get the unique name in its parent's children with @name
 	*/
 	virtual string UniqueName(string name);
+	/*
+	\ Update the object's state
+	\ i.e. @mTransform
+	*/
+	virtual void Update(float dt) { AS_UNUSED(dt); };
+	/*
+	\ Render the object with @interpolation
+	\ Note that @interpolation can be unused
+	\ Must be specified
+	*/
+	virtual void Render(float interpolation) = 0;
+	/*
+	\ Compile Shaders for all drawable objects
+	\ Or compute shader if there are some.
+	*/
+	virtual void PrepareAndCompileShaders() = 0;
 
 public:
 	/*
@@ -101,14 +117,24 @@ public:
 	/*
 	\ Update the object's state
 	\ i.e. @mTransform
+	\ Always call Update first, then call children _Update
+	\ Update can be override
 	*/
-	virtual void Update(float dt) { AS_UNUSED(dt); };
+	void _Update(float dt);
 	/*
 	\ Render the object with @interpolation
 	\ Note that @interpolation can be unused
-	\ Must be specified
+	\ Always call Render first, then call children _Render
+	\ Render can be override
 	*/
-	virtual void Render(float interpolation) = 0;
+	void _Render(float interpolation);
+	/*
+	\ Compile Shaders for all drawable objects
+	\ Or compute shader if there are some.
+	\ Always call PrepareAndCompileShaders first, then call children _PrepareAndCompileShaders
+	\ PrepareAndCompileShaders can be override
+	*/
+	void _PrepareAndCompileShaders();
 };
 
 #endif

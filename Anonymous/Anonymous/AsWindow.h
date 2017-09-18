@@ -2,6 +2,7 @@
 #define _ANONYMOUS_WINDOW_H_
 
 #include <string>
+#include <glad/glad.h>
 #include "GLFW\glfw3.h"
 #include "AsScene.h"
 #include "AsInputEvent.h"
@@ -95,10 +96,15 @@ class AsWindow
 	*/
 	static void DispatchKeyboardEvents(GLFWwindow* window, int key, int scancode, int action, int mode);
 	static void DispatchMouseEvents(GLFWwindow* window, int button, int action, int mode);
+	static void DispatchResizeEvents(GLFWwindow* window, int width, int height);
 	/*
 	\ Render this window
 	*/
 	void Render(float interpolation);
+	/*
+	\ Initialize window environment
+	*/
+	void InitWindowEnvironment();
 
 protected:
 	/*
@@ -106,6 +112,7 @@ protected:
 	*/
 	virtual void KeyboardEvent(AsKeyCode key, AsKeyAction action, AsModifierCode mod);
 	virtual void MouseEvent(AsMouseCode button, AsMouseAction action, AsModifierCode mod);
+	virtual void ResizeEvent(int width, int height);
 	/*
 	\ Window creation
 	\ that can be override
@@ -124,6 +131,15 @@ protected:
 	\ Main game loop
 	*/
 	virtual void MainLoop();
+	/*
+	\ Custom construct scene in this function
+	\ Inherit this class and override this function
+	*/
+	virtual void ConstructScene() = 0;
+	/*
+	\ Compile all shaders
+	*/
+	virtual void PrepareAndCompileShaders();
 
 public:
 	/*
@@ -131,7 +147,7 @@ public:
 	*/
 	AsScene* mScene;
 
-	AsWindow(int posx, int posy, int w, int h, string title);
+	AsWindow(int posx, int posy, int w, int h, const string & title);
 	~AsWindow();
 	
 	void SetPosition(int posx, int posy);

@@ -20,10 +20,15 @@ void AsScene::Release()
 void AsScene::Update(float dt)
 {
 	//mCamera.Update(dt);
-	mRoot->Update(dt);
+	mRoot->_Update(dt);
 }
 
 void AsScene::Render(float interpolation)
 {
-	mRoot->Render(interpolation);
+	mRoot->_Render(interpolation);
+}
+
+void AsScene::PrepareAndCompileShaders()
+{
+	mRoot->_PrepareAndCompileShaders();
 }

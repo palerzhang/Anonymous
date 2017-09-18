@@ -31,7 +31,7 @@ void AsVertexData::LoadData(const float * data, AsLoadFlag flag, AsUint vsize, c
 	glBindVertexArray(mVAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vbufsize), data, usage);
+	glBufferData(GL_ARRAY_BUFFER, vbufsize  * sizeof(float), data, usage);
 
 	switch (flag)
 	{
@@ -74,11 +74,11 @@ void AsVertexData::LoadData(const float * data, AsLoadFlag flag, AsUint vsize, c
 		AsUint * deflt = (AsUint *)malloc(vsize * sizeof(AsUint));
 		for (AsUint i = 0; i < vsize; i++)
 			deflt[i] = i;
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, vsize, deflt, usage);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, vsize * sizeof(AsUint), deflt, usage);
 		free(deflt);
 	}
 	else
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, isize, indices, usage);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, isize * sizeof(AsUint), indices, usage);
 
 	mCount = isize;
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -100,5 +100,4 @@ void AsVertexData::RenderSelf(AsUint mode)
 {
 	glBindVertexArray(mVAO);
 	glDrawElements(mode, mCount, GL_UNSIGNED_INT, 0);
-	//glDrawArrays(mode, 0, mCount);
 }
