@@ -5,24 +5,47 @@
 #include <sstream>
 #include <iostream>
 #include <glad\glad.h>
+#include <unordered_map>
 
 using namespace std;
 
+typedef unordered_map<string, unsigned int> AsShaderCache;
+typedef unordered_map<string, unsigned int>::iterator AsShaderCacheIter;
+typedef pair<string, unsigned int> AsShaderCacheElement;
+
+/*
+\ Use to query compile and link status
+*/
 enum CompileType
 {
 	TYPE_VERTEX = 0,
 	TYPE_FRAGMENT,
 	TYPE_PROGRAM
 };
-
+/*
+\ Shader class is used to manage shaders
+\ Must configure vertex shader and fragment shader
+*/
 class AsShader
 {
+	/*
+	\ vertex shader file name (no extension .vert)
+	*/
 	string mVertFile;
+	/*
+	\ fragment shader file name (no extension .frag)
+	*/
 	string mFragFile;
 public:
+	/*
+	\ Constructor & deconstructor
+	*/
 	AsShader();
 	~AsShader();
-
+	/*
+	\ Uniform setting functions
+	\ Set uniform value after using program
+	*/
 	inline void SetBool(const char * name, bool value) const
 	{
 		glUniform1i(glGetUniformLocation(mID, name), (int)value);
@@ -57,14 +80,70 @@ public:
 	}
 	inline void SetMatrix4x4(const char * name) const
 	{}
-
+	/*
+	\ Set shader files, vertex file name and fragment file name
+	\ @vertFile: vertex file name. 
+	\	If @vertFile is empty, the vertex file name will not change
+	\ @fragFile: fragment file name. 
+	\	If @vertFile is empty, the fragment file name will not change
+	\ This only works before compile shader
+	*/
 	void SetShaderFile(const string & vertFile, const string & fragFile);
+	/*
+	\ Prepare and process shaders (both vertex and fragment)
+	\ Open file and read codes
+	\ Compile codes
+	\ Create and Link program
+	\ Cache if is needed
+	*/
 	void PropareAndProcessShader();
+	/*
+	\ Use the shader program that this shader contains
+	*/
 	void Use();
-
+	/*
+	\ Get vertex shader file path
+	*/
+	inline string GetVertexShaderPath()
+	{
+		return AsShader::sVertexShaderDir + mVertFile + ".vert";
+	}
+	/*
+	\ Get fragment shader file path
+	*/
+	inline string GetFragmentShaderPath()
+	{
+		return AsShader::sFragmentShaderDir + mFragFile + ".frag";
+	}
+	/*
+	\ Combine vertex and fragment shader file name as key of cache
+	*/
+	inline string GetShaderKeyStr()
+	{
+		return mVertFile + ":" + mFragFile;
+	}
+	/*
+	\ Check compile states of vertex and fragment shader 
+	\ and link states of program
+	*/
 	static void CheckCompileStates(unsigned int shaderId, CompileType type);
+	/*
+	\ Vertex shader directory
+	*/
+	static string sVertexShaderDir;
+	/*
+	\ Fragment shader directory
+	*/
+	static string sFragmentShaderDir;
 private:
+	/*
+	\ Program id
+	*/
 	unsigned int mID;
+	/*
+	\ Cache of shader programs
+	*/
+	static AsShaderCache sShaderCache;
 };
 
 #endif

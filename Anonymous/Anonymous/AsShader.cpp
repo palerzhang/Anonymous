@@ -1,6 +1,11 @@
 #include "AsShader.h"
 #include <string>
 
+string AsShader::sVertexShaderDir = "Shader\\vertex\\";
+string AsShader::sFragmentShaderDir = "Shader\\fragment\\";
+
+AsShaderCache AsShader::sShaderCache = AsShaderCache(0);
+
 string TypeName[3] = 
 {
 	"Vertex Shader",
@@ -11,8 +16,8 @@ string TypeName[3] =
 AsShader::AsShader()
 {
 	mID = -1;
-	mVertFile = "Shader\\vertex\\default2d.vert";
-	mFragFile = "Shader\\fragment\\default2d.frag";
+	mVertFile = "default2d";
+	mFragFile = "default2d";
 }
 
 AsShader::~AsShader()
@@ -22,12 +27,24 @@ AsShader::~AsShader()
 
 void AsShader::SetShaderFile(const string & vertFile, const string & fragFile)
 {
-	mVertFile = vertFile;
-	mFragFile = fragFile;
+	if (!vertFile.empty())
+		mVertFile = vertFile;
+	if (!fragFile.empty())
+		mFragFile = fragFile;
 }
 
 void AsShader::PropareAndProcessShader()
-{
+{ 
+	// check if is compiled
+	string key = GetShaderKeyStr();
+	AsShaderCacheIter iter = sShaderCache.find(key);
+	if (iter != sShaderCache.end()) // now find
+	{
+		mID = iter->second;
+		return;
+	}
+	// If not find, then compile
+
 	string vertexCode;
 	string fragmentCode;
 	ifstream vShaderFile;
@@ -39,8 +56,8 @@ void AsShader::PropareAndProcessShader()
 	try
 	{
 		// open files
-		vShaderFile.open(mVertFile);
-		fShaderFile.open(mFragFile);
+		vShaderFile.open(GetVertexShaderPath());
+		fShaderFile.open(GetFragmentShaderPath());
 		stringstream vShaderStream, fShaderStream;
 		// read file's buffer contents into streams
 		vShaderStream << vShaderFile.rdbuf();
@@ -76,6 +93,8 @@ void AsShader::PropareAndProcessShader()
 	// delete the shaders as they're linked into our program now and no longer necessary
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
+	// Add this shader program in cache
+	sShaderCache.insert(AsShaderCacheElement(key, mID));
 }
 
 void AsShader::Use()

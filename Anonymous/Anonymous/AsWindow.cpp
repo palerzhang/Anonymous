@@ -33,7 +33,7 @@ void AsWindow::DispatchResizeEvents(GLFWwindow* window, int width, int height)
 
 void AsWindow::Render(float interpolation)
 {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(mBackground.r, mBackground.g, mBackground.b, mBackground.a);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	mScene->Render(interpolation);

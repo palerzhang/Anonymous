@@ -16,9 +16,9 @@ void MyWindow::ConstructScene()
 	mScene = new AsScene("Scene0");
 
 	AsPolygon * polygon = new AsPolygon("poly", mScene->mRoot);
-	polygon->mColor = AsColor(1.0f, 0.0f, 0.0f, 1.0f);
+	polygon->mColor = AsColor(0.2f, 0.6f, 0.8f, 1.0f);
 
-	float pos[9] =
+	float pos[] =
 	{
 	0.3f, 0.5f, 0.0f,
 	0.1f, -0.5f, 0.0f,
@@ -26,22 +26,23 @@ void MyWindow::ConstructScene()
 	};
 	polygon->mVertex->LoadData(pos, FLAG_POSITION_ONLY, 3, nullptr, 0, GL_STATIC_DRAW);
 	
-
 	AsPolygon * polygon2 = new AsPolygon("poly2", mScene->mRoot);
-	polygon2->mColor = AsColor(0.0f, 1.0f, 0.0f, 1.0f);
+	polygon2->mColor = AsColor(0.7f, 1.0f, 0.3f, 1.0f);
 
-	float pos2[9] =
+	float pos2[] =
 	{
-		-0.3f, 0.5f, 0.0f,
+		-0.1f, 0.5f, 0.0f,
 		-0.1f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f
+		-0.5f, -0.5f, 0.0f,
+		-0.5f, 0.5f, 0.0f
 	};
-	polygon2->mVertex->LoadData(pos2, FLAG_POSITION_ONLY, 3, nullptr, 0, GL_STATIC_DRAW);
+	polygon2->mVertex->LoadData(pos2, FLAG_POSITION_ONLY, 4, nullptr, 0, GL_STATIC_DRAW);
 }
 
 int main()
 {
 	MyWindow window(50, 50, 800, 600, "Test Window");
+	window.SetBackground(AsColor(0.4f, 0.3f, 0.2f, 1.0f));
 
 	window.exec();
 

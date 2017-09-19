@@ -6,6 +6,7 @@
 #include "GLFW\glfw3.h"
 #include "AsScene.h"
 #include "AsInputEvent.h"
+#include "Foundation\AsColor.h"
 
 using namespace std;
 
@@ -62,6 +63,10 @@ class AsWindow
 	\ Title of the window
 	*/
 	string mTitle;
+	/*
+	\ Backgroud color
+	*/
+	AsColor mBackground;
 	/*
 	\ Flags of window
 	*/
@@ -146,18 +151,45 @@ public:
 	\ Scene that this window contains
 	*/
 	AsScene* mScene;
-
+	/*
+	\ Constructor and deconstructor
+	*/
 	AsWindow(int posx, int posy, int w, int h, const string & title);
 	~AsWindow();
-	
+	/*
+	\ Set position of the window's left top cornor
+	\ This works only before running the window
+	*/
 	void SetPosition(int posx, int posy);
+	/*
+	\ Set the dimension of the window
+	\ This works only before running the window
+	*/
 	void SetDimension(int w, int h);
+	/*
+	\ Set the title of window
+	\ This works only before running the window
+	*/
 	void SetTitle(string str);
+	/*
+	\ Set and get window flags
+	*/
 	void SetWindowFlag(AsWindowFlag flag, bool enable);
 	bool GetWindowFlag(AsWindowFlag flag);
-
+	/*
+	\ Set window background color
+	*/
+	inline void SetBackground(const AsColor & color)
+	{
+		mBackground = color;
+	}
+	/*
+	\ Set this window as the event handler
+	*/
 	void CurrentInstanceHandleEvents() { sInstanceHandleEvents = this; }
-
+	/*
+	\ Get attributes of window
+	*/
 	int width();
 	int height();
 	int x();
