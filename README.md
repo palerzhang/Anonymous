@@ -27,6 +27,9 @@ For adopting dynamic library:
 - Using glfw3dll.lib, opengl32.lib
 
 *Addition
+
 GLAD configuration: https://learnopengl-cn.github.io/01%20Getting%20started/02%20Creating%20a%20window/#glad
+
 STB image: https://github.com/nothings/stb/blob/master/stb_image.h
+
 How to use STB: https://learnopengl-cn.github.io/01%20Getting%20started/06%20Textures/#stb_imageh
