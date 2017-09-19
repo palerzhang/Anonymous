@@ -4,7 +4,7 @@ Welcome :)
 
 OpenGL is required over version 4.0
 
-With: GLFW(3.2.1), GLAD(build in gl 4.0)
+With: GLFW(3.2.1), GLAD(build in gl 4.0), stb image loader
 
 Please use VS2013(VC12).
 
@@ -27,5 +27,6 @@ For adopting dynamic library:
 - Using glfw3dll.lib, opengl32.lib
 
 *Addition
-GLAD configuration: https://learnopengl-cn.github.io/01%20Getting%20started/02%20Creating%20a%20window/
-
+GLAD configuration: https://learnopengl-cn.github.io/01%20Getting%20started/02%20Creating%20a%20window/#glad
+STB image: https://github.com/nothings/stb/blob/master/stb_image.h
+How to use STB: https://learnopengl-cn.github.io/01%20Getting%20started/06%20Textures/#stb_imageh

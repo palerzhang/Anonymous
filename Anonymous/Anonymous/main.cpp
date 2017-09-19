@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "AsWindow.h"
+#include <STB\stb_image.h>
 
 class MyWindow : public AsWindow
 {
