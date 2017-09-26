@@ -1,7 +1,7 @@
 #ifndef _ANONYMOUS_VERTEX_DATA_H_
 #define _ANONYMOUS_VERTEX_DATA_H_
 
-typedef unsigned int AsUint;
+#include <Foundation\AsTypes.h>
 
 enum AsLoadFlag
 {

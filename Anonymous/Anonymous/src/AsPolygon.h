@@ -4,7 +4,7 @@
 #include "AsObject.h"
 #include "AsVertexData.h"
 #include "AsShader.h"
-#include "Foundation\AsColor.h"
+#include <Foundation\AsColor.h>
 
 /*
 \ The polygon class.

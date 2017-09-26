@@ -6,7 +6,7 @@
 #include "GLFW\glfw3.h"
 #include "AsScene.h"
 #include "AsInputEvent.h"
-#include "Foundation\AsColor.h"
+#include <Foundation\AsColor.h>
 
 using namespace std;
 

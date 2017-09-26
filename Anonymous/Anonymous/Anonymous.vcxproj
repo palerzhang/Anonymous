@@ -10,6 +10,33 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\AsCamera.h" />
+    <ClInclude Include="src\AsEmptyObject.h" />
+    <ClInclude Include="src\AsInputEvent.h" />
+    <ClInclude Include="src\AsObject.h" />
+    <ClInclude Include="src\AsObjectFamily.h" />
+    <ClInclude Include="src\AsPolygon.h" />
+    <ClInclude Include="src\AsScene.h" />
+    <ClInclude Include="src\AsShader.h" />
+    <ClInclude Include="src\AsTexture2D.h" />
+    <ClInclude Include="src\AsVertexData.h" />
+    <ClInclude Include="src\AsWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AsCamera.cpp" />
+    <ClCompile Include="src\AsObject.cpp" />
+    <ClCompile Include="src\AsObjectFamily.cpp" />
+    <ClCompile Include="src\AsPolygon.cpp" />
+    <ClCompile Include="src\AsScene.cpp" />
+    <ClCompile Include="src\AsShader.cpp" />
+    <ClCompile Include="src\AsTexture2D.cpp" />
+    <ClCompile Include="src\AsVertexData.cpp" />
+    <ClCompile Include="src\AsWindow.cpp" />
+    <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\StbImage.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{43DF9306-01B1-44EE-A7C8-C8B5276736D7}</ProjectGuid>
     <RootNamespace>Anonymous</RootNamespace>
@@ -67,31 +94,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="AsCamera.h" />
-    <ClInclude Include="AsInputEvent.h" />
-    <ClInclude Include="AsObject.h" />
-    <ClInclude Include="AsObjectFamily.h" />
-    <ClInclude Include="AsEmptyObject.h" />
-    <ClInclude Include="AsPolygon.h" />
-    <ClInclude Include="AsScene.h" />
-    <ClInclude Include="AsShader.h" />
-    <ClInclude Include="AsVertexData.h" />
-    <ClInclude Include="AsWindow.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="AsCamera.cpp" />
-    <ClCompile Include="AsObject.cpp" />
-    <ClCompile Include="AsObjectFamily.cpp" />
-    <ClCompile Include="AsPolygon.cpp" />
-    <ClCompile Include="AsScene.cpp" />
-    <ClCompile Include="AsShader.cpp" />
-    <ClCompile Include="AsVertexData.cpp" />
-    <ClCompile Include="AsWindow.cpp" />
-    <ClCompile Include="glad.c" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="StbImage.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

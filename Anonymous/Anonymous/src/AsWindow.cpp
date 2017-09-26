@@ -1,6 +1,7 @@
 #include "AsWindow.h"
-#include "Foundation\AsPreprocessor.h"
+#include <Foundation\AsPreprocessor.h>
 #include "AsPolygon.h"
+#include <iostream>
 
 /*
 \ Version 1.0.0
@@ -76,7 +77,7 @@ void AsWindow::InitWindowEnvironment()
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		cout << "Failed to initialize GLAD" << endl;
 		return;
 	}
 }

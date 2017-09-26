@@ -1,5 +1,8 @@
 #include "AsShader.h"
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 string AsShader::sVertexShaderDir = "Shader\\vertex\\";
 string AsShader::sFragmentShaderDir = "Shader\\fragment\\";

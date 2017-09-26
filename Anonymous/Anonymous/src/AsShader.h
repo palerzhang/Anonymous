@@ -1,9 +1,6 @@
 #ifndef _ANONYMOUS_SHADER_
 #define _ANONYMOUS_SHADER_
 
-#include <fstream>
-#include <sstream>
-#include <iostream>
 #include <glad\glad.h>
 #include <unordered_map>
 
