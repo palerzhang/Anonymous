@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="src\AsCamera.h" />
     <ClInclude Include="src\AsEmptyObject.h" />
+    <ClInclude Include="src\AsImage.h" />
     <ClInclude Include="src\AsInputEvent.h" />
     <ClInclude Include="src\AsObject.h" />
     <ClInclude Include="src\AsObjectFamily.h" />
@@ -25,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AsCamera.cpp" />
+    <ClCompile Include="src\AsImage.cpp" />
     <ClCompile Include="src\AsObject.cpp" />
     <ClCompile Include="src\AsObjectFamily.cpp" />
     <ClCompile Include="src\AsPolygon.cpp" />

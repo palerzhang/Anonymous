@@ -24,7 +24,7 @@ void AsPolygon::Release()
 	if (nullptr != mShader)
 	{
 		delete mShader;
-		mVertex = nullptr;
+		mShader = nullptr;
 	}
 }
 
@@ -33,7 +33,7 @@ void AsPolygon::Render(float interpolation)
 	AS_UNUSED(interpolation);
 	mShader->Use();
 	mShader->SetFloat4("_Color", mColor.r, mColor.g, mColor.b, mColor.a);
-	mVertex->RenderSelf(GL_LINE_LOOP);
+	mVertex->RenderSelf(GL_POLYGON);
 }
 
 void AsPolygon::PrepareAndCompileShaders()

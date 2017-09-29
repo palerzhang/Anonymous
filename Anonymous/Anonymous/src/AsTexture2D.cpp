@@ -42,7 +42,6 @@ void AsTexture2D::GenerateTexture2D()
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	stbi_image_free(data);
-
 }
 
 void AsTexture2D::ActiveTexture()

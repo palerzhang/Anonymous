@@ -4,7 +4,6 @@
 #include <string>
 #include "AsCamera.h"
 #include "AsEmptyObject.h"
-#include "AsPolygon.h"
 
 using namespace std;
 /*

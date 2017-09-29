@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "AsWindow.h"
-#include <STB\stb_image.h>
+#include "AsImage.h"
 
 class MyWindow : public AsWindow
 {
@@ -16,7 +16,18 @@ void MyWindow::ConstructScene()
 {
 	mScene = new AsScene("Scene0");
 
-	AsPolygon * polygon = new AsPolygon("poly", mScene->mRoot);
+	AsImage * image = new AsImage("image", mScene->mRoot);
+	image->mColor.a = 0.0f;
+
+	image->mTexture->mFile = "wall.jpg";
+	image->mTexture->mWrapMode = AS_REPEAT;
+	image->mTexture->mMagnifyFilter = AS_NEAREST;
+	image->mTexture->mMinifyFilter = AS_NEAREST;
+	image->mTexture->mTextureMode = AS_RGBA;
+
+	image->mTexture->GenerateTexture2D();
+
+	/*AsPolygon * polygon = new AsPolygon("poly", mScene->mRoot);
 	polygon->mColor = AsColor(0.2f, 0.6f, 0.8f, 1.0f);
 
 	float pos[] =
@@ -37,7 +48,7 @@ void MyWindow::ConstructScene()
 		-0.5f, -0.5f, 0.0f,
 		-0.5f, 0.5f, 0.0f
 	};
-	polygon2->mVertex->LoadData(pos2, FLAG_POSITION_ONLY, 4, nullptr, 0, GL_STATIC_DRAW);
+	polygon2->mVertex->LoadData(pos2, FLAG_POSITION_ONLY, 4, nullptr, 0, GL_STATIC_DRAW);*/
 }
 
 int main()

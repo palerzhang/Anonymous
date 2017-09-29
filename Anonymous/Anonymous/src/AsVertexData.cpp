@@ -22,7 +22,35 @@ void AsVertexData::LoadData(const float * data, AsLoadFlag flag, AsUint vsize, c
 	if (mLoaded || nullptr == data)
 		return;
 
-	AsUint vbufsize = (flag == FLAG_NORMAL_ONLY || flag == FLAG_POSITION_ONLY ? vsize * 3 : vsize * 6);
+	AsUint vbufsize;// = (flag == FLAG_POSITION_ONLY ? vsize * 3 : vsize * 6);
+	switch (flag)
+	{
+	case FLAG_POSITION_ONLY:
+	{
+		vbufsize = vsize * 3;
+	}
+		break;
+	case FLAG_POSITION_NORMAL:
+	case FLAG_NORMAL_POSITION:
+	{
+		vbufsize = vsize * 6;
+	}
+		break;
+	case FLAG_POSITION_UV:
+	{
+		vbufsize = vsize * 5;
+	}
+		break;
+	case FLAG_POSITION_NORMAL_UV:
+	{
+		vbufsize = vsize * 8;
+	}
+		break;
+	default:
+	{
+		return;
+	}
+	}
 
 	glGenVertexArrays(1, &mVAO);
 	glGenBuffers(1, &mVBO);
@@ -41,12 +69,6 @@ void AsVertexData::LoadData(const float * data, AsLoadFlag flag, AsUint vsize, c
 		glEnableVertexAttribArray(ATTRIBUTE_POSITION_POSITION);
 	}
 		break;
-	case FLAG_NORMAL_ONLY:
-	{
-		glVertexAttribPointer(ATTRIBUTE_POSITION_NORMAL, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(ATTRIBUTE_POSITION_NORMAL);
-	}
-		break;
 	case FLAG_POSITION_NORMAL:
 	{
 		glVertexAttribPointer(ATTRIBUTE_POSITION_POSITION, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
@@ -63,6 +85,27 @@ void AsVertexData::LoadData(const float * data, AsLoadFlag flag, AsUint vsize, c
 
 		glVertexAttribPointer(ATTRIBUTE_POSITION_POSITION, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(ATTRIBUTE_POSITION_POSITION);
+	}
+		break;
+	case FLAG_POSITION_UV:
+	{
+		glVertexAttribPointer(ATTRIBUTE_POSITION_POSITION, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(ATTRIBUTE_POSITION_POSITION);
+
+		glVertexAttribPointer(ATTRIBUTE_POSITION_UV, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(ATTRIBUTE_POSITION_UV);
+	}
+		break;
+	case FLAG_POSITION_NORMAL_UV:
+	{
+		glVertexAttribPointer(ATTRIBUTE_POSITION_POSITION, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(ATTRIBUTE_POSITION_POSITION);
+
+		glVertexAttribPointer(ATTRIBUTE_POSITION_NORMAL, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(ATTRIBUTE_POSITION_NORMAL);
+
+		glVertexAttribPointer(ATTRIBUTE_POSITION_UV, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(ATTRIBUTE_POSITION_UV);
 	}
 		break;
 	}

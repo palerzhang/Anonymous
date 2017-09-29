@@ -11,7 +11,6 @@
 \ Polygon is usually used in 2D (3D is ok)
 \ Draw polygon along vertices one by one
 */
-
 class AsPolygon : public AsObject
 {
 public:
@@ -32,7 +31,7 @@ public:
 	/*
 	\ Constructor
 	*/
-	AsPolygon(string name = "New Object", AsObject * parent = nullptr);
+	AsPolygon(string name = "New Polygon", AsObject * parent = nullptr);
 	/*
 	\ Deconstructor
 	*/
@@ -46,7 +45,8 @@ public:
 	*/
 	void Render(float interpolation) override;
 	/*
-	\ 
+	\ Prepare and compile shader
+	\ i.e. set some uniforms if needed
 	*/
 	void PrepareAndCompileShaders() override;
 };
