@@ -1,4 +1,4 @@
-#ifndef _ANONYMOUS_MATH_H_
+﻿#ifndef _ANONYMOUS_MATH_H_
 #define _ANONYMOUS_MATH_H_
 
 #include <math.h>
@@ -35,7 +35,7 @@ inline float AsMin(float a, float b)
 
 inline float AsAbs(float x)
 {
-	return abs(x);
+	return fabsf(x);
 }
 
 inline float AsSqrt(float x)

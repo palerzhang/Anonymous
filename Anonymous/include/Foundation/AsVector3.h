@@ -1,4 +1,4 @@
-#ifndef _ANONYMOUS_VECTOR3_H_
+﻿#ifndef _ANONYMOUS_VECTOR3_H_
 #define _ANONYMOUS_VECTOR3_H_
 
 #include "AsMath.h"
@@ -113,7 +113,7 @@ public:
 	*/
 	inline float magnitude() const
 	{
-		return sqrt(magnitudeSquared());
+		return sqrtf(magnitudeSquared());
 	}
 
 	/**
